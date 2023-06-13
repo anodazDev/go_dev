@@ -20,6 +20,7 @@ type loginController struct {
 
 func LoginHandler(loginService service.LoginService,
 	jwtAuth service.JWTService) LoginController {
+
 	return &loginController{
 		loginService: loginService,
 		jwtAuth:      jwtAuth,
@@ -32,7 +33,9 @@ func (controller *loginController) Login(ctx *gin.Context) (string, string, erro
 	if err != nil {
 		return "", "", err
 	}
+
 	isUserAuthenticated := controller.loginService.LoginUser(credential.Email, credential.Password)
+
 	if isUserAuthenticated {
 		return controller.jwtAuth.GenerateToken(credential.Email, true)
 	}

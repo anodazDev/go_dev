@@ -18,11 +18,12 @@ func main() {
 	server := gin.Default()
 
 	server.POST("/login", func(ctx *gin.Context) {
-		token, refresh_token, err := loginController.Login(ctx)
+		accessToken, refresh_token, err := loginController.Login(ctx)
 
-		if token != "" && err == nil {
+		if accessToken != "" && err == nil {
+			ctx.SetCookie("jwt_token", accessToken, 3600, "/", "localhost", false, true)
 			ctx.JSON(http.StatusOK, gin.H{
-				"accessToken":  token,
+				"accessToken":  accessToken,
 				"refreshToken": refresh_token,
 			})
 		} else {
@@ -48,6 +49,7 @@ func main() {
 			refreshToken := ctx.GetHeader("Refresh-Token")
 
 			newAccessToken, newRefreshToken, err := jwtService.RefreshToken(refreshToken)
+			ctx.SetCookie("jwt_token", newAccessToken, 3600, "/", "localhost", false, true)
 			if err != nil {
 				ctx.JSON(http.StatusUnauthorized, gin.H{
 					"error": "Invalid refresh token",
