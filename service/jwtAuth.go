@@ -12,7 +12,7 @@ import (
 type JWTService interface {
 	GenerateToken(email string, isUser bool) (string, string, error)
 	ValidateToken(token string) (*jwt.Token, error)
-	RefreshToken(refreshToken string) (string, error)
+	RefreshToken(refreshToken string) (string, string, error)
 }
 type authCustomClaims struct {
 	Name string `json:"name"`
@@ -88,7 +88,7 @@ func (service *jwtServices) ValidateToken(encodedToken string) (*jwt.Token, erro
 	})
 }
 
-func (service *jwtServices) RefreshToken(refreshToken string) (string, error) {
+func (service *jwtServices) RefreshToken(refreshToken string) (string, string, error) {
 	token, err := jwt.Parse(refreshToken, func(token *jwt.Token) (interface{}, error) {
 		if _, isValid := token.Method.(*jwt.SigningMethodHMAC); !isValid {
 			return nil, fmt.Errorf("invalid token", token.Header["alg"])
@@ -96,24 +96,24 @@ func (service *jwtServices) RefreshToken(refreshToken string) (string, error) {
 		return []byte(service.secretKey), nil
 	})
 	if err != nil {
-		return "", fmt.Errorf("failed to parse refresh token: %v", err)
+		return "", "", fmt.Errorf("failed to parse refresh token: %v", err)
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		return "", fmt.Errorf("invalid refresh token")
+		return "", "", fmt.Errorf("invalid refresh token")
 	}
 
 	email, ok := claims["name"].(string)
 	if !ok {
-		return "", fmt.Errorf("failed to extract email from refresh token claims")
+		return "", "", fmt.Errorf("failed to extract email from refresh token claims")
 	}
 
 	// Generate a new access token
-	accessToken, _, err := service.GenerateToken(email, true)
+	accessToken, refreshToken, err := service.GenerateToken(email, true)
 	if err != nil {
-		return "", fmt.Errorf("failed to generate access token: %v", err)
+		return "", "", fmt.Errorf("failed to generate access token: %v", err)
 	}
 
-	return accessToken, nil
+	return accessToken, refreshToken, nil
 }

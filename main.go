@@ -22,8 +22,8 @@ func main() {
 
 		if token != "" && err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
-				"token":         token,
-				"refresh_token": refresh_token,
+				"accessToken":  token,
+				"refreshToken": refresh_token,
 			})
 		} else {
 			ctx.JSON(http.StatusUnauthorized, nil)
@@ -47,7 +47,7 @@ func main() {
 
 			refreshToken := ctx.GetHeader("Refresh-Token")
 
-			newAccessToken, err := jwtService.RefreshToken(refreshToken)
+			newAccessToken, newRefreshToken, err := jwtService.RefreshToken(refreshToken)
 			if err != nil {
 				ctx.JSON(http.StatusUnauthorized, gin.H{
 					"error": "Invalid refresh token",
@@ -57,7 +57,8 @@ func main() {
 
 			// Return the new access token
 			ctx.JSON(http.StatusOK, gin.H{
-				"access_token": newAccessToken,
+				"accessToken":  newAccessToken,
+				"refreshToken": newRefreshToken,
 			})
 		})
 	}

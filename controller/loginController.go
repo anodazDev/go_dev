@@ -1,7 +1,9 @@
 package controller
 
 import (
-	"github.com/anodazDev/go_dev/dataTransfer"
+	"fmt"
+
+	"github.com/anodazDev/go_dev/datatransfer"
 	"github.com/anodazDev/go_dev/service"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +27,7 @@ func LoginHandler(loginService service.LoginService,
 }
 
 func (controller *loginController) Login(ctx *gin.Context) (string, string, error) {
-	var credential dataTransfer.LoginCredentials
+	var credential datatransfer.LoginCredentials
 	err := ctx.ShouldBind(&credential)
 	if err != nil {
 		return "", "", err
@@ -33,7 +35,6 @@ func (controller *loginController) Login(ctx *gin.Context) (string, string, erro
 	isUserAuthenticated := controller.loginService.LoginUser(credential.Email, credential.Password)
 	if isUserAuthenticated {
 		return controller.jwtAuth.GenerateToken(credential.Email, true)
-
 	}
-	return "", "", nil
+	return "", "", fmt.Errorf("failed to login: ")
 }
