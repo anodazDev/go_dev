@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "dfeab7f6-b680-4acd-9905-81528e1e7e29",
+		"name": "go api jwt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2890640",
+		"_collection_link": "https://speeding-escape-828052.postman.co/workspace/My-Workspace~08ae44c2-adf3-41e6-82a5-08620ec8ec72/collection/2890640-dfeab7f6-b680-4acd-9905-81528e1e7e29?action=share&creator=2890640&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "miraistorm@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODY2OTc5MTksImlhdCI6MTY4NjY5NDMxOSwiaXNzIjoiQmlrYXNoIn0.PyUtZkRWtRRpV3ZkiUUojwnSrvB9jR2DjK3i8UCYWKU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODY4MDY0MDUsImlhdCI6MTY4NjYzMzYwNSwiaXNzIjoiQmlrYXNoIn0._u5grIZKrUEWa-E8dN4Z4_BFBG2pNRtIfYyB9yzs3e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/user/profile",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/refresh",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODY2OTc5MTksImlhdCI6MTY4NjY5NDMxOSwiaXNzIjoiQmlrYXNoIn0.PyUtZkRWtRRpV3ZkiUUojwnSrvB9jR2DjK3i8UCYWKU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Refresh-Token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODcyOTkyODIsImlhdCI6MTY4NjY5NDQ4MiwiaXNzIjoiQmlrYXNoIn0.zLiPVxXxISt4JbqCuzGyBblRR0_fXJQO6ePyFdU5JiI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODcyOTkxMTksImlhdCI6MTY4NjY5NDMxOSwiaXNzIjoiQmlrYXNoIn0.SBPgQTMS2SGwFBwz7LWazuIWjdMTiKfmxsQsWkegh8Y",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/user/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWlyYWlzdG9ybUBnbWFpbC5jb20iLCJ1c2VyIjp0cnVlLCJleHAiOjE2ODY2OTc5MTksImlhdCI6MTY4NjY5NDMxOSwiaXNzIjoiQmlrYXNoIn0.PyUtZkRWtRRpV3ZkiUUojwnSrvB9jR2DjK3i8UCYWKU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/user/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
