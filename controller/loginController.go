@@ -1,14 +1,14 @@
 package controller
 
 import (
-	"github.com/anodazDev/go_dev/datatransfer"
+	"github.com/anodazDev/go_dev/dataTransfer"
 	"github.com/anodazDev/go_dev/service"
 	"github.com/gin-gonic/gin"
 )
 
 // interfact
 type LoginController interface {
-	Login(ctx *gin.Context) string
+	Login(ctx *gin.Context) (string, string, error)
 }
 
 type loginController struct {
@@ -24,16 +24,16 @@ func LoginHandler(loginService service.LoginService,
 	}
 }
 
-func (controller *loginController) Login(ctx *gin.Context) string {
-	var credential datatransfer.LoginCredentials
+func (controller *loginController) Login(ctx *gin.Context) (string, string, error) {
+	var credential dataTransfer.LoginCredentials
 	err := ctx.ShouldBind(&credential)
 	if err != nil {
-		return "no data found"
+		return "", "", err
 	}
 	isUserAuthenticated := controller.loginService.LoginUser(credential.Email, credential.Password)
 	if isUserAuthenticated {
 		return controller.jwtAuth.GenerateToken(credential.Email, true)
 
 	}
-	return ""
+	return "", "", nil
 }

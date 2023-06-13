@@ -18,29 +18,47 @@ func main() {
 	server := gin.Default()
 
 	server.POST("/login", func(ctx *gin.Context) {
-		token := loginController.Login(ctx)
-		if token != "" {
+		token, refresh_token, err := loginController.Login(ctx)
+
+		if token != "" && err == nil {
 			ctx.JSON(http.StatusOK, gin.H{
-				"token": token,
+				"token":         token,
+				"refresh_token": refresh_token,
 			})
 		} else {
 			ctx.JSON(http.StatusUnauthorized, nil)
 		}
 	})
 
-	v1 := server.Group("/v1", middleware.AuthorizeJWT())
-	// v1.Use(middleware.AuthorizeJWT())
-	{
-		v1.GET("/test", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"message": "success"})
-		})
-	}
-
-	profile := server.Group("/", middleware.AuthorizeJWT())
+	user := server.Group("/user", middleware.AuthorizeJWT())
 	{
 		email, username, tel := service.ProfileUser()
-		profile.GET("/profile", func(ctx *gin.Context) {
+		user.GET("/profile", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{"Email": email, "username": username, "tel": tel})
+		})
+		user.GET("/logout", func(ctx *gin.Context) {
+			ctx.SetCookie("jwt_token", "", -1, "/", "", false, true)
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"message": "Logged out successfully",
+			})
+		})
+		user.POST("/refresh", func(ctx *gin.Context) {
+
+			refreshToken := ctx.GetHeader("Refresh-Token")
+
+			newAccessToken, err := jwtService.RefreshToken(refreshToken)
+			if err != nil {
+				ctx.JSON(http.StatusUnauthorized, gin.H{
+					"error": "Invalid refresh token",
+				})
+				return
+			}
+
+			// Return the new access token
+			ctx.JSON(http.StatusOK, gin.H{
+				"access_token": newAccessToken,
+			})
 		})
 	}
 

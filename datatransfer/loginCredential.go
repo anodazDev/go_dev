@@ -1,4 +1,4 @@
-package datatransfer
+package dataTransfer
 
 // Login credential
 type LoginCredentials struct {
