@@ -109,7 +109,6 @@ func (service *jwtServices) RefreshToken(refreshToken string) (string, string, e
 		return "", "", fmt.Errorf("failed to extract email from refresh token claims")
 	}
 
-	// Generate a new access token
 	accessToken, refreshToken, err := service.GenerateToken(email, true)
 	if err != nil {
 		return "", "", fmt.Errorf("failed to generate access token: %v", err)
